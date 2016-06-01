@@ -7,6 +7,7 @@ O objetivo deste projeto é gerar pequenos relatórios com base em pontos espec�
 ## 2. Funcionalidades
 
 - Mapeamento de éxons e íntrons;
+- Cálculo de tamanho da área CDS;
 
 ### 2.1. Mapeamento de éxons e íntrons
 
@@ -89,12 +90,96 @@ Onde:
 
 O primeiro número é o número do éxon ou do íntron, os números que seguem são as posições de início e fim (os éxons são informados pelo usuário e os íntrons são calculados com base nas lacunas que aparecem entre os pontos) e o último número é a quantidade de bases que existe para este éxon ou íntron.
 
+### 2.2. Cálculo de tamanho da área CDS
+
+A área de _features_ do arquivo GenBank possui a sessão CDS, conforme exemplo abaixo:
+
+     CDS             join(1042..1700,4520..4715,5686..5853,5965..6111,
+                     6261..6340,7447..7629,7733..7884,8058..8184,9110..9346,
+                     10569..10689,10895..10981,11285..11392,11894..12054,
+                     12781..12834,12943..13060,13536..13671,13784..14030,
+                     15446..15568,15697..15865,16047..16255,17260..17420,
+                     17969..18045)
+                     /gene="POLG"
+                     /gene_synonym="MDP1; MIRAS; MTDPS4A; MTDPS4B; PEO; POLG1;
+                     POLGA; SANDO; SCAE"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: BestRefSeq."
+                     /codon_start=1
+                     /product="DNA polymerase subunit gamma-1"
+                     /protein_id="NP_001119603.1"
+                     /db_xref="GI:187171277"
+                     /db_xref="CCDS:CCDS10350.1"
+                     /db_xref="GeneID:5428"
+                     /db_xref="HGNC:HGNC:9179"
+                     /db_xref="HPRD:01438"
+                     /db_xref="MIM:174763"
+                     /translation="MSRLLWRKVAGATVGPGPVPAPGRWVSSSVPASDPSDGQRRRQQ
+                     QQQQQQQQQQQPQQPQVLSSEGGQLRHNPLDIQMLSRGLHEQIFGQGGEMPGEAAVRR
+                     SVEHLQKHGLWGQPAVPLPDVELRLPPLYGDNLDQHFRLLAQKQSLPYLEAANLLLQA
+                     QLPPKPPAWAWAEGWTRYGPEGEAVPVAIPEERALVFDVEVCLAEGTCPTLAVAISPS
+                     AWYSWCSQRLVEERYSWTSQLSPADLIPLEVPTGASSPTQRDWQEQLVVGHNVSFDRA
+                     HIREQYLIQGSRMRFLDTMSMHMAISGLSSFQRSLWIAAKQGKHKVQPPTKQGQKSQR
+                     KARRGPAISSWDWLDISSVNSLAEVHRLYVGGPPLEKEPRELFVKGTMKDIRENFQDL
+                     MQYCAQDVWATHEVFQQQLPLFLERCPHPVTLAGMLEMGVSYLPVNQNWERYLAEAQG
+                     TYEELQREMKKSLMDLANDACQLLSGERYKEDPWLWDLEWDLQEFKQKKAKKVKKEPA
+                     TASKLPIEGAGAPGDPMDQEDLGPCSEEEEFQQDVMARACLQKLKGTTELLPKRPQHL
+                     PGHPGWYRKLCPRLDDPAWTPGPSLLSLQMRVTPKLMALTWDGFPLHYSERHGWGYLV
+                     PGRRDNLAKLPTGTTLESAGVVCPYRAIESLYRKHCLEQGKQQLMPQEAGLAEEFLLT
+                     DNSAIWQTVEELDYLEVEAEAKMENLRAAVPGQPLALTARGGPKDTQPSYHHGNGPYN
+                     DVDIPGCWFFKLPHKDGNSCNVGSPFAKDFLPKMEDGTLQAGPGGASGPRALEINKMI
+                     SFWRNAHKRISSQMVVWLPRSALPRAVIRHPDYDEEGLYGAILPQVVTAGTITRRAVE
+                     PTWLTASNARPDRVGSELKAMVQAPPGYTLVGADVDSQELWIAAVLGDAHFAGMHGCT
+                     AFGWMTLQGRKSRGTDLHSKTATTVGISREHAKIFNYGRIYGAGQPFAERLLMQFNHR
+                     LTQQEAAEKAQQMYAATKGLRWYRLSDEGEWLVRELNLPVDRTEGGWISLQDLRKVQR
+                     ETARKSQWKKWEVVAERAWKGGTESEMFNKLESIATSDIPRTPVLGCCISRALEPSAV
+                     QEEFMTSRVNWVVQSSAVDYLHLMLVAMKWLFEEFAIDGRFCISIHDEVRYLVREEDR
+                     YRAALALQITNLLTRCMFAYKLGLNDLPQSVAFFSAVDIDRCLRKEVTMDCKTPSNPT
+                     GMERRYGIPQGEALDIYQIIELTKGSLEKRSQPGP"
+
+O primeiro ponto desta área é formado pelas posições que a compõe, no caso:
+
+	join(1042..1700,4520..4715,5686..5853,5965..6111,6261..6340,7447..7629,7733..7884,8058..8184,9110..9346,10569..10689,10895..10981,11285..11392,11894..12054,12781..12834,12943..13060,13536..13671,13784..14030,15446..15568,15697..15865,16047..16255,17260..17420,17969..18045)
+	
+Portanto, se esta parte for extraída e passada como parâmetro, o programa terá condições de informar a seguinte saída:
+
+	--- CDS areas ---
+	1:	1042..1700 = 658
+	2:	4520..4715 = 195
+	3:	5686..5853 = 167
+	4:	5965..6111 = 146
+	5:	6261..6340 = 79
+	6:	7447..7629 = 182
+	7:	7733..7884 = 151
+	8:	8058..8184 = 126
+	9:	9110..9346 = 236
+	10:	10569..10689 = 120
+	11:	10895..10981 = 86
+	12:	11285..11392 = 107
+	13:	11894..12054 = 160
+	14:	12781..12834 = 53
+	15:	12943..13060 = 117
+	16:	13536..13671 = 135
+	17:	13784..14030 = 246
+	18:	15446..15568 = 122
+	19:	15697..15865 = 168
+	20:	16047..16255 = 208
+	21:	17260..17420 = 160
+	22:	17969..18045 = 76
+
+
+	Total Size = 3698
+
 
 ## 3. Utilização
 
 ### 3.1. Parâmetros
 
 	mapgbjoin="join(1..123,800..1000)"
+	
+O texto após o **=** é informado pelo usuário e deverá ser extraído do arquivo GenBank.
+
+	cds-size="join(1..123,800..1000)"
 	
 O texto após o **=** é informado pelo usuário e deverá ser extraído do arquivo GenBank.
 

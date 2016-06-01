@@ -13,6 +13,7 @@ public class MapJoinServiceImpl implements MapJoinService {
         List<Integer[]> introns = new ArrayList<Integer[]>();
 
         int index = 0;
+        System.out.println("\n");
         System.out.println("--- Exons ---");
         int lastExonEnd = 0;
         for (Integer[] exon : exons) {

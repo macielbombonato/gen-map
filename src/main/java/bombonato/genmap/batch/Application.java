@@ -1,5 +1,6 @@
 package bombonato.genmap.batch;
 
+import bombonato.genmap.business.service.CdsService;
 import bombonato.genmap.business.service.MapJoinService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +25,7 @@ import java.util.List;
 public class Application {
 
 	public static final String PARAM_MAP_JOIN ="mapgbjoin=";
+		public static final String PARAM_CDS_SIZE ="cds-size=";
 
 	public static final String PARAM_HELP="--help";
 
@@ -48,6 +50,7 @@ public class Application {
 			boolean needHelp = false;
 
 			List<Integer[]> exons = null;
+			List<Integer[]> cdsList = null;
 
 			// Prepare application
 			for (int i = 0; i < args.length; i++) {
@@ -78,12 +81,34 @@ public class Application {
 							exons.add(values);
 						}
 					}
+				} else if (args[i].startsWith(PARAM_CDS_SIZE)) {
+					String value[] = args[i].split("=");
+
+					String joinStr = value[1];
+
+					joinStr = joinStr.replace("join(", "");
+					joinStr = joinStr.replace(")", "");
+					joinStr = joinStr.replace(" ", "");
+
+					String[] joinStrValues = joinStr.split(",");
+
+					cdsList = new ArrayList<Integer[]>();
+
+					for(String join : joinStrValues ) {
+						String[] valuesStr = join.replace("..", "-").split("-");
+
+						if (valuesStr != null && valuesStr.length == 2) {
+							Integer[] values = new Integer[2];
+							values[0] = new Integer(valuesStr[0]);
+							values[1] = new Integer(valuesStr[1]);
+
+							cdsList.add(values);
+						}
+					}
 				}
 			}
 
 			if (needHelp) {
-				printHelp();
-			} else if (exons == null || exons.size() == 0) {
 				printHelp();
 			} else {
 				// Start Application
@@ -94,11 +119,22 @@ public class Application {
 
 				ConfigurableApplicationContext ctx = app.run(args);
 
-				MapJoinService service = ctx.getBean(MapJoinService.class);
 
-				service.mapJoin(
-						exons
-				);
+				if (exons != null) {
+					MapJoinService mapJoinService = ctx.getBean(MapJoinService.class);
+
+					mapJoinService.mapJoin(
+							exons
+					);
+				}
+
+				if (cdsList != null) {
+					CdsService cdsService = ctx.getBean(CdsService.class);
+
+					cdsService.calcCdsSize(
+							cdsList
+					);
+				}
 
 				end = new Date();
 
@@ -120,12 +156,13 @@ public class Application {
 		System.out.println("  $ java -jar genmap-1.0.0 mapgbjoin=\"join(1..123,800..1000)\"");
 
 		System.out.println("Options:");
-		System.out.println("  Mandatory:");
-		System.out.println("    mapgbjoin   Will get the join (described in GenBank file) and map exons and introns");
+		System.out.println("  mapgbjoin     Will get the join (described in GenBank file) and map exons and introns");
 		System.out.println("                spaces in this string is not allowed");
 		System.out.println("");
-		System.out.println("  other:");
-		System.out.println("    --help      Show this help");
+		System.out.println("  cds-size      Calculate the CDS size. Works with or without join.");
+		System.out.println("                spaces in this string is not allowed");
+		System.out.println("");
+		System.out.println("  --help        Show this help");
 
 	}
 
