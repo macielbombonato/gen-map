@@ -117,7 +117,7 @@ public class Application {
 
 	private static void printHelp() {
 		System.out.println("Usage:");
-		System.out.println("  $ java -jar genmap-1.0.0 mapgbjoin=join(1..123,800..1000)");
+		System.out.println("  $ java -jar genmap-1.0.0 mapgbjoin=\"join(1..123,800..1000)\"");
 
 		System.out.println("Options:");
 		System.out.println("  Mandatory:");

@@ -94,7 +94,7 @@ O primeiro número é o número do éxon ou do íntron, os números que seguem s
 
 ### 3.1. Parâmetros
 
-	mapgbjoin=join(1..123,800..1000)
+	mapgbjoin="join(1..123,800..1000)"
 	
 O texto após o **=** é informado pelo usuário e deverá ser extraído do arquivo GenBank.
 
@@ -133,5 +133,5 @@ Acesse a área de download com todas versões geradas [clicando aqui](https://bi
 
 No terminal do seu computador execute o comando:
 
-	$ java -jar genmap-[versao].jar mapgbjoin=join(1..123,800..1000)
+	$ java -jar genmap-[versao].jar mapgbjoin="join(1..123,800..1000)"
 	
